@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -739,17 +740,28 @@ public class Tools {
 	 * @return An array of the read file.
 	 * @throws FileNotFoundException
 	 */
-	public static ArrayList<String> readResourceFile(String resource) throws FileNotFoundException {
+	public static ArrayList<String> readResourceFile(String resource)
+			throws FileNotFoundException {
 		ArrayList<String> result = new ArrayList<String>();
-		ClassLoader classLoader = Tools.class.getClassLoader();
-		File file = new File(classLoader.getResource(resource).getFile());
+		InputStream is = getResourceAsStream(resource);
+		String raw = convertStreamToString(is);
+		String[] split = raw.split("\n");
+		for (String s : split)
+			result.add(s);
+		return result;
+	}
 
-		Scanner scanner = new Scanner(file);
-		while (scanner.hasNextLine()) {
-			String line = scanner.nextLine();
-			result.add(line);
+	static String convertStreamToString(InputStream is) {
+		Scanner s = new Scanner(is);
+		s.useDelimiter("\\A");
+		String result = s.hasNext() ? s.next() : "";
+		s.close();
+		try {
+			if (is != null)
+				is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		scanner.close();
 		return result;
 	}
 }
