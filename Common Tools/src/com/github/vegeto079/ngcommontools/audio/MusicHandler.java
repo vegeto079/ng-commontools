@@ -126,13 +126,13 @@ public class MusicHandler {
 	public void setVolume(float gain) {
 		if (gain > 1) {
 			if (debug)
-				logger.log(LogLevel.DEBUG, "Volume cannot go higher than 1 gain.");
+				logger.log(LogLevel.DEBUG, "Volume cannot go higher than 1 gain. (" + gain + ")");
 			else
 				logger.log(LogLevel.WARNING, "Volume cannot go any higher.");
 			gain = 1;
 		} else if (gain < 0) {
 			if (debug)
-				logger.log(LogLevel.DEBUG, "Volume cannot go lower than 0 gain.");
+				logger.log(LogLevel.DEBUG, "Volume cannot go lower than 0 gain. (" + gain + ")");
 			else
 				logger.log(LogLevel.WARNING, "Volume cannot go any lower.");
 			gain = 0;
