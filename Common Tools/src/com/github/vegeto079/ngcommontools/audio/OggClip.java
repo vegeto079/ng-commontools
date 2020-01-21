@@ -683,7 +683,6 @@ public class OggClip {
 		}
 	}
 
-	@SuppressWarnings("serial")
 	private class InternalException extends Exception {
 		public InternalException(Exception e) {
 			super(e);
