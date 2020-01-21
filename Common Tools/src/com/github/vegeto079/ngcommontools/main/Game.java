@@ -116,7 +116,6 @@ import com.github.vegeto079.ngcommontools.main.Logger.LogLevel;
  * @version 1.109: {@link #mouseDragged(MouseEvent)} now properly passes on the
  *          right button pressed.
  */
-@SuppressWarnings("serial")
 public abstract class Game extends JComponent
 		implements Runnable, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 	/**
@@ -124,20 +123,18 @@ public abstract class Game extends JComponent
 	 */
 	public Logger logger = null;
 	/**
-	 * How many times per second we want to run the {@link Game}'s game logic.
-	 * <br>
+	 * How many times per second we want to run the {@link Game}'s game logic. <br>
 	 * Note: this is separate from {@link Game#paintTicksPerSecond}.
 	 */
 	public int ticksPerSecond = 24;
 	/**
-	 * How many times per second we want to run the {@link Game}'s paint logic.
-	 * <br>
+	 * How many times per second we want to run the {@link Game}'s paint logic. <br>
 	 * Note: this is separate from {@link Game#ticksPerSecond}.
 	 */
 	public int paintTicksPerSecond = 60;
 	/**
-	 * Whether or not this {@link Game} is currently on and running. If turned
-	 * to <b>false</b> while running, the {@link Game} will end.
+	 * Whether or not this {@link Game} is currently on and running. If turned to
+	 * <b>false</b> while running, the {@link Game} will end.
 	 */
 	private boolean running = false;
 	/**
@@ -204,8 +201,7 @@ public abstract class Game extends JComponent
 	 * @param logger
 	 *            See {@link Game#logger}.
 	 * @param args
-	 *            Arguments from to be interpreted by
-	 *            {@link #mainSuper(String[])}.
+	 *            Arguments from to be interpreted by {@link #mainSuper(String[])}.
 	 * @param ticksPerSecond
 	 *            See {@link Game#ticksPerSecond}.
 	 * @param paintTicksPerSecond
@@ -376,11 +372,11 @@ public abstract class Game extends JComponent
 	}
 
 	/**
-	 * The method called by the game thread. Override this and create all of
-	 * your game-related methods here, but remember to super call it.<br>
+	 * The method called by the game thread. Override this and create all of your
+	 * game-related methods here, but remember to super call it.<br>
 	 * If not called by the overriding class, {@link #ups} will not be properly
-	 * calculated, meaning {@link #getUps()} will return erroneous values,
-	 * possibly causing the game thread to act abnormal as it depends on it.<br>
+	 * calculated, meaning {@link #getUps()} will return erroneous values, possibly
+	 * causing the game thread to act abnormal as it depends on it.<br>
 	 * {@link #tickcounter} and {@link #screenshotThread} also depend on this
 	 * method.
 	 */
@@ -400,12 +396,12 @@ public abstract class Game extends JComponent
 	}
 
 	/**
-	 * The method called by the paint thread. Override this and create all of
-	 * your paint-related methods here.<br>
-	 * Overriding this method however is not required (like {@link #gameTick()})
-	 * as this method currently doesn't do anything by itself: necessary paint
-	 * methods are instead handled automatically through
-	 * {@link #paint(Graphics)} (which is not to be overridden).
+	 * The method called by the paint thread. Override this and create all of your
+	 * paint-related methods here.<br>
+	 * Overriding this method however is not required (like {@link #gameTick()}) as
+	 * this method currently doesn't do anything by itself: necessary paint methods
+	 * are instead handled automatically through {@link #paint(Graphics)} (which is
+	 * not to be overridden).
 	 */
 	protected void paintTick(Graphics2D g) {
 
@@ -745,8 +741,8 @@ public abstract class Game extends JComponent
 
 	/**
 	 * To be overridden by an extension of this Game class if necessary.<br>
-	 * Keep in mind that usage of ALT commands is not recommended, as this is
-	 * the key used for built-in Game commands and may interfere.<br>
+	 * Keep in mind that usage of ALT commands is not recommended, as this is the
+	 * key used for built-in Game commands and may interfere.<br>
 	 * 
 	 * @param key
 	 *            keyCode of the key pressed.
@@ -762,11 +758,13 @@ public abstract class Game extends JComponent
 		boolean throughKey = true;
 		if (e.getKeyCode() == KeyEvent.VK_ALT) {
 			altPressed = false;
-			throughKey = false;
+			if (enterPressed)
+				throughKey = false;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			enterPressed = false;
-			throughKey = false;
+			if (altPressed)
+				throughKey = false;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_PRINTSCREEN && altPressed && allowScreenshots) {
 			screenshotThread = new ScreenshotThread();
@@ -778,8 +776,8 @@ public abstract class Game extends JComponent
 
 	/**
 	 * To be overridden by an extension of this Game class if necessary.<br>
-	 * Keep in mind that usage of ALT commands is not recommended, as this is
-	 * the key used for built-in Game commands and may interfere.<br>
+	 * Keep in mind that usage of ALT commands is not recommended, as this is the
+	 * key used for built-in Game commands and may interfere.<br>
 	 * 
 	 * @param key
 	 *            keyCode of the key pressed.
@@ -974,25 +972,25 @@ public abstract class Game extends JComponent
 		 */
 		ALL;
 		/**
-		 * @return Whether or not this {@link Pause} value indicates that we
-		 *         should pause the game thread ({@link Game#gameTick()}).
+		 * @return Whether or not this {@link Pause} value indicates that we should
+		 *         pause the game thread ({@link Game#gameTick()}).
 		 */
 		public boolean game() {
 			return equals(Pause.GAME) || equals(Pause.ALL);
 		}
 
 		/**
-		 * @return Whether or not this {@link Pause} value indicates that we
-		 *         should pause the paint thread ({@link Game#paintTick()}).
+		 * @return Whether or not this {@link Pause} value indicates that we should
+		 *         pause the paint thread ({@link Game#paintTick()}).
 		 */
 		public boolean paint() {
 			return equals(Pause.PAINT) || equals(Pause.ALL);
 		}
 
 		/**
-		 * @return Whether or not this {@link Pause} value indicates that we
-		 *         should pause both the game thread ({@link Game#gameTick()})
-		 *         and the paint thread ({@link Game#paintTick()}).
+		 * @return Whether or not this {@link Pause} value indicates that we should
+		 *         pause both the game thread ({@link Game#gameTick()}) and the paint
+		 *         thread ({@link Game#paintTick()}).
 		 */
 		public boolean all() {
 			return equals(Pause.ALL);
@@ -1010,8 +1008,8 @@ public abstract class Game extends JComponent
 	}
 
 	/**
-	 * @return Whether or not this instance of Game was only recently created -
-	 *         ie. less than 2 seconds ago.
+	 * @return Whether or not this instance of Game was only recently created - ie.
+	 *         less than 2 seconds ago.
 	 */
 	public boolean recentlyStarted() {
 		return System.currentTimeMillis() - runetimeMXBean.getStartTime() < 2000;
